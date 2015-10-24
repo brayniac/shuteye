@@ -1,0 +1,16 @@
+[package]
+name = "shuteye"
+version = "0.0.1"
+authors = ["Brian Martin <brayniac@gmail.com>"]
+
+license = "MIT"
+
+description = "shuteye lets your program catch a quick nap. Provides nanosleep functionality"
+
+homepage = "https://github.com/brayniac/shuteye"
+documentation = "http://brayniac.github.io/shuteye"
+repository = "https://github.com/brayniac/shuteye"
+
+readme = "README.md"
+
+keywords = [ "shuteye", "sleep", "nanosecond", "nanosleep" ]
