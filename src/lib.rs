@@ -18,9 +18,12 @@
 //! ```
 //! use shuteye::*;
 //!
+//! // create a timespec for the interval to sleep
 //! let ts = Timespec::from_nano(1000).unwrap();
 //! assert_eq!(ts.get_sec(), 0);
 //! assert_eq!(ts.get_nsec(), 1000);
+//!
+//! // call sleep
 //! shuteye::sleep(ts);
 
 #![crate_type = "lib"]
@@ -29,7 +32,7 @@
 
 use std::fmt;
 
-const RELTIME: i32 = 0;
+const TIMER_RELTIME: i32 = 0;
 const NSEC_PER_SEC: i64 = 1_000_000_000;
 const CLOCK_MONOTONIC: i32 = 1;
 
@@ -56,9 +59,15 @@ impl Timespec {
         if nsec >= NSEC_PER_SEC {
             let sec = (nsec as f64 / NSEC_PER_SEC as f64).floor() as i64;
             let nsec = nsec - (sec * NSEC_PER_SEC);
-            return Ok(Timespec { tv_sec: sec, tv_nsec: nsec });
+            return Ok(Timespec {
+                tv_sec: sec,
+                tv_nsec: nsec,
+            });
         }
-        return Ok(Timespec { tv_sec: 0, tv_nsec: nsec });
+        return Ok(Timespec {
+            tv_sec: 0,
+            tv_nsec: nsec,
+        });
     }
 
     /// return seconds component of Timespec
@@ -107,9 +116,29 @@ impl fmt::Debug for Timespec {
     }
 }
 
+/// sleep for a relative time
+///
+/// # Example
+/// ```
+/// use shuteye::*;
+///
+/// let ts = Timespec::from_nano(1000).unwrap();
+///
+/// // simple sleep
+/// shuteye::sleep(ts);
+///
+/// // remain captures remaining time from `Timespec`
+/// match shuteye::sleep(ts) {
+///     Some(remain) => {
+///         // some sleep time remains
+///     }
+///     None => {
+///         // no sleep time remains
+///     }
+/// }
 pub fn sleep(ts: Timespec) -> Option<Timespec> {
     let mut remain = Timespec::from_nano(0_i64).unwrap();
-    clock_nanosleep(CLOCK_MONOTONIC, RELTIME, &ts, Some(&mut remain));
+    clock_nanosleep(CLOCK_MONOTONIC, TIMER_RELTIME, &ts, Some(&mut remain));
     if remain.get_nsec() == 0 && remain.get_sec() == 0 {
         return None;
     }
