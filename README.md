@@ -21,6 +21,10 @@ Then, add this to your crate root:
 extern crate shuteye;
 ```
 
+## Documentation
+
+View the docs here: [http://brayniac.github.io/shuteye/](http://brayniac.github.io/shuteye/)
+
 ## Features
 
 * nanosleep
