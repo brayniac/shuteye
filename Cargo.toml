@@ -3,7 +3,7 @@ name = "shuteye"
 version = "0.0.5"
 authors = ["Brian Martin <brayniac@gmail.com>"]
 
-license = "MIT"
+license = "MIT OR Apache-2.0"
 
 description = "shuteye provides for high-resolution sleep in rust. Let your code catch some shuteye"
 
