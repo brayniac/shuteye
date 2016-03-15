@@ -44,7 +44,6 @@ pub struct Timespec {
 }
 
 impl Timespec {
-
     /// create a Timespec from nanoseconds
     ///
     /// # Example
@@ -64,10 +63,10 @@ impl Timespec {
                 tv_nsec: nsec,
             });
         }
-        return Ok(Timespec {
+        Ok(Timespec {
             tv_sec: 0,
             tv_nsec: nsec,
-        });
+        })
     }
 
     /// return seconds component of Timespec
@@ -147,7 +146,7 @@ pub fn sleep(ts: Timespec) -> Option<Timespec> {
 
 #[cfg(target_os = "linux")]
 fn clock_nanosleep(id: i32, flags: i32, req: &Timespec, remain: Option<&mut Timespec>) -> i32 {
-    extern {
+    extern "C" {
         fn clock_nanosleep(clock_id: i32,
                            flags: i32,
                            req: *const Timespec,
@@ -162,7 +161,7 @@ fn clock_nanosleep(id: i32, flags: i32, req: &Timespec, remain: Option<&mut Time
 
 #[cfg(target_os = "macos")]
 fn clock_nanosleep(_: i32, _: i32, req: &Timespec, remain: Option<&mut Timespec>) -> i32 {
-    extern {
+    extern "C" {
         fn nanosleep(req: *const Timespec, rem: *mut Timespec) -> i32;
     }
     match remain {
