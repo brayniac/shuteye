@@ -20,7 +20,7 @@
 //! use std::time::Duration;
 //!
 //! // call sleep
-//! sleep(Duration::new(1, 0));
+//! sleep(Duration::new(0, 1000));
 
 #![crate_type = "lib"]
 
@@ -48,7 +48,7 @@ struct Timespec {
 /// // simple sleep for 1s duration
 /// sleep(Duration::new(1, 0));
 ///
-/// // remain captures remaining time from `Timespec`
+/// // remain captures remaining time
 /// match sleep(Duration::new(1, 0)) {
 ///     Some(remain) => {
 ///         // woke early - some sleep time remains
