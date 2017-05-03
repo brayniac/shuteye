@@ -1,9 +1,9 @@
 extern crate shuteye;
 extern crate time;
 
-use std::time::Duration;
 
 use shuteye::sleep;
+use std::time::Duration;
 use time::precise_time_ns;
 
 fn duration_from_ns(duration_ns: u64) -> Duration {

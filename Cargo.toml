@@ -15,7 +15,7 @@ readme = "README.md"
 
 keywords = [ "shuteye", "sleep", "nanosecond", "nanosleep" ]
 
-include = [ "src/**/*", "README.md", "LICENSE-*", "Cargo.toml" ]
+exclude = [ "scripts" ]
 
 [dependencies]
 libc = "^0.2"
