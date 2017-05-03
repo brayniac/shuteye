@@ -12,7 +12,7 @@ To use `shuteye`, first add this to your `Cargo.toml`:
 
 ```toml
 [dependencies]
-shuteye = "*"
+shuteye = "^0"
 ```
 
 Then, add this to your crate root:
