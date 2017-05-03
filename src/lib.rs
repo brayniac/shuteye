@@ -26,22 +26,14 @@
 
 #![crate_name = "shuteye"]
 
+extern crate libc;
+
 use std::time::Duration;
-
-const TIMER_RELTIME: i32 = 0;
-const CLOCK_MONOTONIC: i32 = 1;
-
-#[repr(C)]
-#[derive(Copy, Clone, PartialEq)]
-struct Timespec {
-    tv_sec: i64,
-    tv_nsec: i64,
-}
 
 /// sleep for a relative time
 ///
 /// # Example
-/// ```
+/// ```rust
 /// use std::time::Duration;
 /// use shuteye::sleep;
 ///
@@ -57,52 +49,54 @@ struct Timespec {
 ///         // woke on-time or late - no sleep time remains
 ///     }
 /// }
+/// ```
 pub fn sleep(duration: Duration) -> Option<Duration> {
     let ts = duration_to_timespec(duration);
-    let mut remain = Timespec {
+    let mut remain = libc::timespec {
         tv_sec: 0,
         tv_nsec: 0,
     };
-    clock_nanosleep(CLOCK_MONOTONIC, TIMER_RELTIME, &ts, Some(&mut remain));
+
+    #[cfg(target_os = "linux")]
+    clock_nanosleep(libc::CLOCK_MONOTONIC, 0, &ts, Some(&mut remain));
+
+    #[cfg(target_os = "macos")]
+    nanosleep(&ts, Some(&mut remain));
+
+
     if remain.tv_nsec == 0 && remain.tv_sec == 0 {
         return None;
     }
     Some(timespec_to_duration(remain))
 }
 
-fn duration_to_timespec(duration: Duration) -> Timespec {
-    Timespec {
+fn duration_to_timespec(duration: Duration) -> libc::timespec {
+    libc::timespec {
         tv_sec: duration.as_secs() as i64,
         tv_nsec: duration.subsec_nanos() as i64,
     }
 }
 
-fn timespec_to_duration(timespec: Timespec) -> Duration {
+fn timespec_to_duration(timespec: libc::timespec) -> Duration {
     Duration::new(timespec.tv_sec as u64, timespec.tv_nsec as u32)
 }
 
 #[cfg(target_os = "linux")]
-fn clock_nanosleep(id: i32, flags: i32, req: &Timespec, remain: Option<&mut Timespec>) -> i32 {
-    extern "C" {
-        fn clock_nanosleep(clock_id: i32,
-                           flags: i32,
-                           req: *const Timespec,
-                           rem: *mut Timespec)
-                           -> i32;
-    }
+fn clock_nanosleep(clk_id: libc::clockid_t,
+                   flags: libc::c_int,
+                   req: &libc::timespec,
+                   remain: Option<&mut libc::timespec>)
+                   -> i32 {
     match remain {
-        Some(p) => unsafe { clock_nanosleep(id, flags, req as *const _, p as *mut _) },
-        _ => unsafe { clock_nanosleep(id, flags, req as *const _, 0 as *mut _) },
+        Some(p) => unsafe { libc::clock_nanosleep(clk_id, flags, req as *const _, p as *mut _) },
+        _ => unsafe { libc::clock_nanosleep(clk_id, flags, req as *const _, 0 as *mut _) },
     }
 }
 
 #[cfg(target_os = "macos")]
-fn clock_nanosleep(_: i32, _: i32, req: &Timespec, remain: Option<&mut Timespec>) -> i32 {
-    extern "C" {
-        fn nanosleep(req: *const Timespec, rem: *mut Timespec) -> i32;
-    }
+fn nanosleep(req: &libc::timespec, remain: Option<&mut libc::timespec>) -> i32 {
     match remain {
-        Some(p) => unsafe { nanosleep(req as *const _, p as *mut _) },
-        _ => unsafe { nanosleep(req as *const _, 0 as *mut _) },
+        Some(p) => unsafe { libc::nanosleep(req as *const _, p as *mut _) },
+        _ => unsafe { libc::nanosleep(req as *const _, 0 as *mut _) },
     }
 }
