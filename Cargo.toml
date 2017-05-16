@@ -8,14 +8,12 @@ license = "MIT OR Apache-2.0"
 description = "shuteye provides for high-resolution sleep in rust. Let your code catch some shuteye"
 
 homepage = "https://github.com/brayniac/shuteye"
-documentation = "http://brayniac.github.io/shuteye"
+documentation = "http://docs.rs/shuteye"
 repository = "https://github.com/brayniac/shuteye"
 
 readme = "README.md"
 
 keywords = [ "shuteye", "sleep", "nanosecond", "nanosleep" ]
-
-exclude = [ "scripts" ]
 
 [dependencies]
 libc = "^0.2"

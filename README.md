@@ -23,7 +23,7 @@ extern crate shuteye;
 
 ## Documentation
 
-View the docs here: [http://brayniac.github.io/shuteye/](http://brayniac.github.io/shuteye/)
+View the docs here: [https://docs.rs/shuteye/](https://docs.rs/shuteye/)
 
 ## Features
 
