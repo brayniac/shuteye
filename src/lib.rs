@@ -22,12 +22,11 @@
 //! // call sleep
 //! sleep(Duration::new(0, 1000));
 
-#![crate_type = "lib"]
-
-#![crate_name = "shuteye"]
+#![deny(warnings)]
 
 extern crate libc;
 
+use std::ptr;
 use std::time::Duration;
 
 /// sleep for a relative time
@@ -89,7 +88,7 @@ fn clock_nanosleep(clk_id: libc::clockid_t,
                    -> i32 {
     match remain {
         Some(p) => unsafe { libc::clock_nanosleep(clk_id, flags, req as *const _, p as *mut _) },
-        _ => unsafe { libc::clock_nanosleep(clk_id, flags, req as *const _, 0 as *mut _) },
+        _ => unsafe { libc::clock_nanosleep(clk_id, flags, req as *const _, ptr::null_mut()) },
     }
 }
 
@@ -97,6 +96,6 @@ fn clock_nanosleep(clk_id: libc::clockid_t,
 fn nanosleep(req: &libc::timespec, remain: Option<&mut libc::timespec>) -> i32 {
     match remain {
         Some(p) => unsafe { libc::nanosleep(req as *const _, p as *mut _) },
-        _ => unsafe { libc::nanosleep(req as *const _, 0 as *mut _) },
+        _ => unsafe { libc::nanosleep(req as *const _, ptr::null_mut()) },
     }
 }

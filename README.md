@@ -2,9 +2,18 @@
 
 shuteye provides for high-resolution sleep in rust. Let your code catch some shuteye
 
-[![Build Status](https://travis-ci.org/brayniac/shuteye.svg?branch=master)](https://travis-ci.org/brayniac/shuteye)
-[![crates.io](http://meritbadge.herokuapp.com/shuteye)](https://crates.io/crates/shuteye)
-[![License](http://img.shields.io/:license-mit-blue.svg)](http://doge.mit-license.org)
+The API documentation of this library can be found at
+[docs.rs/shuteye](https://docs.rs/shuteye/).
+
+[![travis-badge][]][travis] [![downloads-badge][] ![release-badge][]][crate] [![license-badge][]](#license)
+
+[travis-badge]: https://img.shields.io/travis/brayniac/shuteye/master.svg
+[downloads-badge]: https://img.shields.io/crates/d/shuteye.svg
+[release-badge]: https://img.shields.io/crates/v/shuteye.svg
+[license-badge]: https://img.shields.io/crates/l/shuteye.svg
+[travis]: https://travis-ci.org/brayniac/shuteye
+[crate]: https://crates.io/crates/shuteye
+[Cargo]: https://github.com/rust-lang/cargo
 
 ## Usage
 
