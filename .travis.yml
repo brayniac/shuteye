@@ -22,3 +22,9 @@ matrix:
       script:
         - cargo install -f clippy || exit 0
         - cargo clippy
+    - os: linux
+      rust: stable
+      env: TYPE=build TARGET=i686-unknown-linux-gnu RUST_BACKTRACE=1
+      script:
+        - rustup target add i686-unknown-linux-gnu
+        - cargo build --target i686-unknown-linux-gnu
