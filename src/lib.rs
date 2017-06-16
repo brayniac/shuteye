@@ -56,11 +56,9 @@ pub fn sleep(duration: Duration) -> Option<Duration> {
         tv_nsec: 0,
     };
 
-    #[cfg(target_os = "linux")]
-    clock_nanosleep(libc::CLOCK_MONOTONIC, 0, &ts, Some(&mut remain));
+    #[cfg(target_os = "linux")] clock_nanosleep(libc::CLOCK_MONOTONIC, 0, &ts, Some(&mut remain));
 
-    #[cfg(target_os = "macos")]
-    nanosleep(&ts, Some(&mut remain));
+    #[cfg(target_os = "macos")] nanosleep(&ts, Some(&mut remain));
 
 
     if remain.tv_nsec == 0 && remain.tv_sec == 0 {
@@ -81,11 +79,12 @@ fn timespec_to_duration(timespec: libc::timespec) -> Duration {
 }
 
 #[cfg(target_os = "linux")]
-fn clock_nanosleep(clk_id: libc::clockid_t,
-                   flags: libc::c_int,
-                   req: &libc::timespec,
-                   remain: Option<&mut libc::timespec>)
-                   -> i32 {
+fn clock_nanosleep(
+    clk_id: libc::clockid_t,
+    flags: libc::c_int,
+    req: &libc::timespec,
+    remain: Option<&mut libc::timespec>,
+) -> i32 {
     match remain {
         Some(p) => unsafe { libc::clock_nanosleep(clk_id, flags, req as *const _, p as *mut _) },
         _ => unsafe { libc::clock_nanosleep(clk_id, flags, req as *const _, ptr::null_mut()) },

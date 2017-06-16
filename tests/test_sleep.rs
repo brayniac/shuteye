@@ -7,8 +7,10 @@ use std::time::Duration;
 use time::precise_time_ns;
 
 fn duration_from_ns(duration_ns: u64) -> Duration {
-    Duration::new(duration_ns / 1_000_000_000,
-                  (duration_ns % 1_000_000_000) as u32)
+    Duration::new(
+        duration_ns / 1_000_000_000,
+        (duration_ns % 1_000_000_000) as u32,
+    )
 }
 
 fn measure_sleep(sleep_duration: Duration) -> Duration {
