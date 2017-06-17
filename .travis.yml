@@ -14,14 +14,12 @@ matrix:
       rust: nightly
       env: TYPE=rustfmt RUST_BACKTRACE=1
       script:
-        - cargo install -f rustfmt
-        - cargo fmt -- --write-mode=diff
+        - (travis_wait 20 cargo install -f rustfmt && cargo fmt -- --write-mode=diff) || exit 0
     - os: linux
       rust: nightly
       env: TYPE=clippy RUST_BACKTRACE=1
       script:
-        - cargo install -f clippy || exit 0
-        - cargo clippy
+        - (travis_wait 20 cargo install -f clippy && cargo clippy) || exit 0
     - os: linux
       rust: stable
       env: TYPE=build TARGET=i686-unknown-linux-gnu RUST_BACKTRACE=1
