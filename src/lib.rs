@@ -70,7 +70,7 @@ pub fn sleep(duration: Duration) -> Option<Duration> {
 fn duration_to_timespec(duration: Duration) -> libc::timespec {
     libc::timespec {
         tv_sec: duration.as_secs() as libc::time_t,
-        tv_nsec: duration.subsec_nanos() as libc::c_long,
+        tv_nsec: i64::from(duration.subsec_nanos()) as libc::c_long,
     }
 }
 
